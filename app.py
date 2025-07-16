@@ -6,9 +6,10 @@ from flask_cors import CORS
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import os
 
 # --- Configuration ---
-TMDB_API_KEY = '02ca13db6bc6d28a10bbc751710b0af3'
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
 # --- Initialize App and NLTK ---
 app = Flask(__name__)
