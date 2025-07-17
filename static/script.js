@@ -67,7 +67,8 @@ async function processMovieDetails(tmdbId, movieTitle) {
     }
 }
 
-    function displayMovieDetails(details) {
+function displayMovieDetails(details) {
+    // --- 1. The HTML structure is simplified to use ONE grid for everyone ---
     movieDetailsContainer.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-8">
             <div class="md:col-span-1">
@@ -82,9 +83,8 @@ async function processMovieDetails(tmdbId, movieTitle) {
                 </div>
                 <p class="text-gray-300 mb-4">${details.overview || 'No overview available.'}</p>
 
-                <h3 class="text-2xl font-bold mt-6 mb-2 border-l-4 border-yellow-400 pl-3">Crew & Cast</h3>
-                <div id="movie-crew" class="flex flex-wrap gap-4 mb-6"></div>
-                <div id="movie-cast" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                <h3 class="text-2xl font-bold mt-6 mb-2 border-l-4 border-yellow-400 pl-3">Cast & Crew</h3>
+                <div id="people-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
 
                 <div class="mt-6">
                     <a href="/sentiment_page?tmdb_id=${details.tmdb_id}&title=${encodeURIComponent(details.title)}" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Analyze Reviews</a>
@@ -92,31 +92,33 @@ async function processMovieDetails(tmdbId, movieTitle) {
             </div>
         </div>`;
 
-    const crewContainer = document.getElementById('movie-crew');
-    const castContainer = document.getElementById('movie-cast');
+    // --- 2. The logic now combines the director and cast BEFORE creating the cards ---
+    const peopleGrid = document.getElementById('people-grid');
+    let peopleToDisplay = [];
 
-    const createPersonCard = (person, role, container) => {
-        if (!person || !person.name) return; // Skip if person is null or has no name
+    // Add the director to the list first, if they exist
+    if (details.director) {
+        peopleToDisplay.push({ ...details.director, role: 'Director' });
+    }
+
+    // Add the top 7 cast members to the list
+    if (details.cast) {
+        const castMembers = details.cast.slice(0, 7).map(member => ({ ...member, role: member.character }));
+        peopleToDisplay.push(...castMembers);
+    }
+
+    // --- 3. A single loop now creates cards for everyone in the combined list ---
+    peopleToDisplay.forEach(person => {
         const card = document.createElement('div');
         card.className = 'text-center cursor-pointer';
         card.dataset.actorId = person.id;
         card.innerHTML = `
             <img src="${person.profile_path ? `https://image.tmdb.org/t/p/w200${person.profile_path}` : 'https://placehold.co/200x300/1a202c/ffffff?text=No+Photo'}" alt="${person.name}" class="rounded-full w-20 h-20 mx-auto object-cover">
             <p class="mt-2 text-sm font-semibold">${person.name}</p>
-            <p class="text-xs text-gray-400">${role}</p>`;
+            <p class="text-xs text-gray-400">${person.role}</p>`;
         card.addEventListener('click', () => showActorDetails(person.id));
-        container.appendChild(card);
-    };
-
-    if (details.director) {
-        createPersonCard(details.director, 'Director', crewContainer);
-    }
-
-    if (details.cast) {
-        details.cast.slice(0, 8).forEach(member => {
-            createPersonCard(member, member.character, castContainer);
-        });
-    }
+        peopleGrid.appendChild(card);
+    });
 
     movieDetailsContainer.classList.remove('hidden');
     initialPrompt.classList.add('hidden');
