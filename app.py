@@ -44,6 +44,9 @@ def fetch_tmdb_details(tmdb_id):
 
         poster_path = data.get('poster_path')
         full_poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None
+        crew = data.get('credits', {}).get('crew', [])
+        director_info = next((p for p in crew if p.get("job") == "Director"), None)
+        writer_info = next((p for p in crew if p.get("job") in ['Screenplay', 'Writer']), None)
 
         return {
             "tmdb_id": data.get('id'),
@@ -59,7 +62,9 @@ def fetch_tmdb_details(tmdb_id):
             "revenue": data.get('revenue'),
             "genres": [g['name'] for g in data.get('genres', [])],
             "production_companies": [c['name'] for c in data.get('production_companies', [])],
-            "runtime": data.get('runtime')
+            "runtime": data.get('runtime'),
+            "director": director_info,
+            "writer": writer_info
         }
     except Exception as e:
         print(f"Error fetching details for TMDB ID {tmdb_id}: {e}")
@@ -128,11 +133,6 @@ def api_movie_details(tmdb_id):
     if not details:
         return jsonify({"error": "Could not fetch movie details"}), 404
 
-    director = "N/A"
-    crew = details.get("crew", [])
-    director_info = next((p for p in crew if p.get("job") == "Director"), None)
-    director = director_info.get("name") if director_info else "N/A"
-
     return jsonify({
         "tmdb_id": details["tmdb_id"],
         "title": details["title"],
@@ -147,7 +147,7 @@ def api_movie_details(tmdb_id):
         "runtime": details.get("runtime", 0),
         "cast": details.get("cast", [])[:8],
         "reviews": details.get("reviews", [])[:10],
-        "director": director
+        "director": details.get("director")
     })
 
 @app.route('/api/sentiment')
