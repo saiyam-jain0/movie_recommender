@@ -33,8 +33,12 @@ MovieFlix is a comprehensive, full-stack movie recommendation web application de
 -   **Live Sentiment Analysis:** Users can click a button to open a dedicated page that fetches up to 25 recent user reviews from the TMDB API and performs real-time sentiment analysis using NLTK's VADER. The results include an overall percentage breakdown of positive, neutral, and negative feedback.
 -   **Interactive UI & Rich Details:**
     -   **Autocomplete Search:** The search bar provides live suggestions from the movie corpus as the user types.
+    -   ![Recommendations for Batman Begins](images/Autocomplete_Search.png)
     -   **Comprehensive Movie Details:** The main view displays a wealth of information, including the poster, overview, genres, runtime, and crew information.
+    -   ![Recommendations for Batman Begins](images/Comprehensive_Movie_Details.png)
     -   **Clickable Actor/Crew Profiles:** Users can click on any cast member, director, or writer to open a detailed modal pop-up with their photo, biography, and a list of their most popular movies.
+    -   ![Recommendations for Batman Begins](images/Clickable_Profiles.png)
+
 
 ## **3. Workflow Explained**
 
@@ -110,3 +114,4 @@ This project is licensed under the MIT License — feel free to use and modify.
 
 -   **TMDb API** for providing the comprehensive movie metadata and images that power this application.
 -   The **NLTK** and **Scikit-learn** teams for their powerful and intuitive libraries.
+
