@@ -15,7 +15,7 @@
 **[► Open Live Website](https://movie-recommender-cvmp.onrender.com)**
 > **Note:** This project is hosted on Render's free tier. As a result, the server will **spin down after a period of inactivity**. The initial load when you first visit the site might take up to **50 seconds** while the server wakes up. Subsequent requests will be fast.
 
-**[► Watch the Demo Video]((https://drive.google.com/file/d/1DnMOy8OIKMKCOihpwA_NqHYe7nRsSoll/view?usp=sharing))**
+**[► Watch the Demo Video](https://drive.google.com/file/d/1DnMOy8OIKMKCOihpwA_NqHYe7nRsSoll/view?usp=sharing)**
 
 
 ---
@@ -114,6 +114,7 @@ This project is licensed under the MIT License — feel free to use and modify.
 
 -   **TMDb API** for providing the comprehensive movie metadata and images that power this application.
 -   The **NLTK** and **Scikit-learn** teams for their powerful and intuitive libraries.
+
 
 
 
